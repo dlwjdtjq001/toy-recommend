@@ -1,115 +1,184 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>메뉴 룰렛</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            padding: 30px;
-        }
-        #menuList {
-            margin-top: 20px;
-            list-style: none;
-            padding: 0;
-        }
-        #menuList li {
-            margin: 5px 0;
-        }
-        .menu-item {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-        .delete-btn {
-            background-color: red;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 2px 6px;
-            cursor: pointer;
-        }
-        #result {
-            font-size: 2em;
-            margin-top: 30px;
-            color: green;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>메뉴 추천 룰렛</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: url('https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      text-align: center;
+      width: 90%;
+      max-width: 500px;
+    }
+
+    h1 {
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      width: 60%;
+      margin-right: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 10px;
+      background-color: #007aff;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #005fcc;
+    }
+
+    #menuList {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .delete-btn {
+      background-color: #ff3b30;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    #spin {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    #result {
+      font-size: 1.5em;
+      margin-top: 30px;
+      color: #00ff88;
+      font-weight: bold;
+      min-height: 2em;
+    }
+
+    @media (max-width: 480px) {
+      input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>🍽️ 메뉴 추천 룰렛 with 승민이와 저녁 ㅎ_ㅎ</h1>
-
-    <input type="text" id="menuInput" placeholder="메뉴 입력">
+  <div class="container">
+    <h1>🍽️ 승민이와 저녁 메뉴 룰렛</h1>
+    <input type="text" id="menuInput" placeholder="예: 김치찌개, 파스타 등">
     <button id="addMenu">추가</button>
 
     <ul id="menuList"></ul>
 
     <button id="spin">룰렛 돌리기</button>
-
     <div id="result"></div>
+  </div>
 
-    <script>
-        const menuInput = document.getElementById('menuInput');
-        const addMenuBtn = document.getElementById('addMenu');
-        const menuList = document.getElementById('menuList');
-        const spinBtn = document.getElementById('spin');
-        const result = document.getElementById('result');
+  <script>
+    const menuInput = document.getElementById('menuInput');
+    const addMenuBtn = document.getElementById('addMenu');
+    const menuList = document.getElementById('menuList');
+    const spinBtn = document.getElementById('spin');
+    const result = document.getElementById('result');
 
-        let menus = [];
+    let menus = [];
 
-        addMenuBtn.addEventListener('click', () => {
-            const menu = menuInput.value.trim();
-            if (menu) {
-                menus.push(menu);
-                addMenuToList(menu);
-                menuInput.value = "";
-            }
-        });
+    addMenuBtn.addEventListener('click', () => {
+      const menu = menuInput.value.trim();
+      if (menu) {
+        menus.push(menu);
+        addMenuToList(menu);
+        menuInput.value = "";
+      }
+    });
 
-        function addMenuToList(menu) {
-            const li = document.createElement('li');
-            li.classList.add('menu-item');
+    function addMenuToList(menu) {
+      const li = document.createElement('li');
+      li.classList.add('menu-item');
 
-            const span = document.createElement('span');
-            span.textContent = menu;
+      const span = document.createElement('span');
+      span.textContent = menu;
 
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = "❌";
-            deleteBtn.className = "delete-btn";
-            deleteBtn.addEventListener('click', () => {
-                menus = menus.filter(m => m !== menu);
-                menuList.removeChild(li);
-            });
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = "❌";
+      deleteBtn.className = "delete-btn";
+      deleteBtn.addEventListener('click', () => {
+        menus = menus.filter(m => m !== menu);
+        menuList.removeChild(li);
+      });
 
-            li.appendChild(span);
-            li.appendChild(deleteBtn);
-            menuList.appendChild(li);
+      li.appendChild(span);
+      li.appendChild(deleteBtn);
+      menuList.appendChild(li);
+    }
+
+    spinBtn.addEventListener('click', () => {
+      if (menus.length === 0) {
+        alert("메뉴를 먼저 추가해주세요!");
+        return;
+      }
+
+      let count = 20;
+      let index = 0;
+
+      result.textContent = '돌리는 중...';
+
+      const interval = setInterval(() => {
+        result.textContent = menus[index % menus.length];
+        index++;
+        count--;
+        if (count <= 0) {
+          clearInterval(interval);
+          result.textContent = `👉 오늘의 추천: ${menus[(index - 1) % menus.length]}!`;
         }
-
-        spinBtn.addEventListener('click', () => {
-            if (menus.length === 0) {
-                alert("메뉴를 먼저 추가해주세요!");
-                return;
-            }
-
-            let count = 20;
-            let index = 0;
-
-            result.textContent = '돌리는 중...';
-
-            const interval = setInterval(() => {
-                result.textContent = menus[index % menus.length];
-                index++;
-                count--;
-                if (count <= 0) {
-                    clearInterval(interval);
-                    result.textContent = `👉 오늘의 추천: ${menus[(index - 1) % menus.length]}!`;
-                }
-            }, 100);
-        });
-    </script>
+      }, 100);
+    });
+  </script>
 </body>
 </html>
