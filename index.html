@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴 룰렛</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 30px;
+        }
+        #menuList {
+            margin-top: 20px;
+            list-style: none;
+            padding: 0;
+        }
+        #menuList li {
+            margin: 5px 0;
+        }
+        #result {
+            font-size: 2em;
+            margin-top: 30px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍽️ 메뉴 추천 룰렛 with 승민이와 저녁 ㅎ_ㅎ</h1>
+
+    <input type="text" id="menuInput" placeholder="메뉴 입력">
+    <button id="addMenu">추가</button>
+
+    <ul id="menuList"></ul>
+
+    <button id="spin">룰렛 돌리기</button>
+
+    <div id="result"></div>
+
+    <script>
+        const menuInput = document.getElementById('menuInput');
+        const addMenuBtn = document.getElementById('addMenu');
+        const menuList = document.getElementById('menuList');
+        const spinBtn = document.getElementById('spin');
+        const result = document.getElementById('result');
+
+        let menus = [];
+
+        addMenuBtn.addEventListener('click', () => {
+            const menu = menuInput.value.trim();
+            if (menu) {
+                menus.push(menu);
+                const li = document.createElement('li');
+                li.textContent = menu;
+                menuList.appendChild(li);
+                menuInput.value = "";
+            }
+        });
+
+        spinBtn.addEventListener('click', () => {
+            if (menus.length === 0) {
+                alert("메뉴를 먼저 추가해주세요!");
+                return;
+            }
+
+            let count = 20; // 얼마나 돌릴지 (횟수)
+            let index = 0;
+
+            result.textContent = '돌리는 중...';
+
+            const interval = setInterval(() => {
+                result.textContent = menus[index % menus.length];
+                index++;
+                count--;
+                if (count <= 0) {
+                    clearInterval(interval);
+                    result.textContent = `👉 오늘의 추천: ${menus[(index - 1) % menus.length]}!`;
+                }
+            }, 100); // 돌리는 속도
+        });
+    </script>
+</body>
+</html>
