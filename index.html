@@ -17,6 +17,20 @@
         #menuList li {
             margin: 5px 0;
         }
+        .menu-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .delete-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            cursor: pointer;
+        }
         #result {
             font-size: 2em;
             margin-top: 30px;
@@ -50,12 +64,30 @@
             const menu = menuInput.value.trim();
             if (menu) {
                 menus.push(menu);
-                const li = document.createElement('li');
-                li.textContent = menu;
-                menuList.appendChild(li);
+                addMenuToList(menu);
                 menuInput.value = "";
             }
         });
+
+        function addMenuToList(menu) {
+            const li = document.createElement('li');
+            li.classList.add('menu-item');
+
+            const span = document.createElement('span');
+            span.textContent = menu;
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = "❌";
+            deleteBtn.className = "delete-btn";
+            deleteBtn.addEventListener('click', () => {
+                menus = menus.filter(m => m !== menu);
+                menuList.removeChild(li);
+            });
+
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
+            menuList.appendChild(li);
+        }
 
         spinBtn.addEventListener('click', () => {
             if (menus.length === 0) {
@@ -63,7 +95,7 @@
                 return;
             }
 
-            let count = 20; // 얼마나 돌릴지 (횟수)
+            let count = 20;
             let index = 0;
 
             result.textContent = '돌리는 중...';
@@ -76,7 +108,7 @@
                     clearInterval(interval);
                     result.textContent = `👉 오늘의 추천: ${menus[(index - 1) % menus.length]}!`;
                 }
-            }, 100); // 돌리는 속도
+            }, 100);
         });
     </script>
 </body>
